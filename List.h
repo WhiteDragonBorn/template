@@ -25,12 +25,13 @@ class list {
   ~list() { clear(); };
 
   class iterator {
-    friend class list;
+    //friend class list;
     pointer ptr;
 
    public:
-
     explicit iterator(const pointer& ptr_) : ptr(ptr_) {}
+
+    pointer getPtr() const { return ptr; }
 
     iterator& operator=(const iterator& other) {
       if (this == &other) return *this;
@@ -57,11 +58,11 @@ class list {
     bool operator!=(iterator other) const { return !(*this == other); }
     reference operator*() const { return ptr->data; }
 
-    //pointer operator->() const {
-    //  pointer temp;
-    //  temp = **this;
-    //  return temp;
-    //}
+    // pointer operator->() const {
+    //   pointer temp;
+    //   temp = **this;
+    //   return temp;
+    // }
   };
 
   iterator begin() { return iterator(head); }
@@ -84,20 +85,16 @@ class list {
     head = newNode;
   }
 
-   void insert_after(const iterator& pos, const value_type& value) {
-     pointer newNode = new node(value);
-     pointer pos_p = pos.ptr;
-     newNode->next = pos_p->next;
-     pos_p->next = newNode;
-   }
+  void insert_after(const iterator& pos, const value_type& value) {
+    pointer newNode = new node(value);
+    pointer pos_p = pos.getPtr();
+    newNode->next = pos_p->next;
+    pos_p->next = newNode;
+  }
 
   iterator search(const iterator& from, const iterator& to) {
     iterator ptr = begin();
   }
-
-  // iterator search(const T& value) {
-
-  //}
 
   void delete_front() {
     pointer temp = head;
@@ -107,5 +104,13 @@ class list {
     temp = nullptr;
   }
 
-  void delete_after();
+  void delete_after(const iterator& pos) {
+    pointer posPtr = pos.getPtr();
+    if (posPtr->next != nullptr) {
+      pointer delNode = posPtr->next;
+      posPtr->next = delNode->next;
+      delNode->next = nullptr;
+      delete delNode;
+    }
+  }
 };
