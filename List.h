@@ -25,7 +25,7 @@ class list {
   ~list() { clear(); };
 
   class iterator {
-    //friend class list;
+    // friend class list;
     pointer ptr;
 
    public:
@@ -35,7 +35,7 @@ class list {
 
     iterator& operator=(const iterator& other) {
       if (this == &other) return *this;
-      delete ptr;
+      // delete ptr;
       ptr = other.ptr;
       return *this;
     }
@@ -56,7 +56,16 @@ class list {
 
     bool operator==(iterator other) const { return ptr == other.ptr; }
     bool operator!=(iterator other) const { return !(*this == other); }
+    iterator& operator+=(std::size_t n) {
+      for (; n > 0; --n) {
+        ++(*this);
+      }
+      return *this;
+    }
     reference operator*() const { return ptr->data; }
+
+    // difference_type operator-(iterator other) const { return other.ptr - ptr;
+    // }
 
     // pointer operator->() const {
     //   pointer temp;
@@ -66,7 +75,9 @@ class list {
   };
 
   iterator begin() { return iterator(head); }
+  const iterator cbegin() const { return iterator(head); }
   iterator end() { return iterator(nullptr); }
+  const iterator cend() const { return iterator(nullptr); }
 
   // access
   reference front() { return head->data; }
@@ -92,8 +103,35 @@ class list {
     pos_p->next = newNode;
   }
 
-  iterator search(const iterator& from, const iterator& to) {
-    iterator ptr = begin();
+  template <class InputIt>
+  void insert_after(const iterator& pos, InputIt first, InputIt last) {
+    iterator temp = pos;
+    for (InputIt start = first; start != last; ++start) {
+      insert_after(temp, *start);
+      temp++;
+    }
+  }
+
+  iterator search(value_type elem) {
+    for (auto start = begin(); start != end(); ++start) {
+      if (*start == elem) return start;
+    }
+    return end();
+  }
+
+  // throw
+  template <class InputIt>
+  iterator search(InputIt first, InputIt last) {
+    for (auto start = begin(); start != end(); ++start) {
+      if (*start == *first) {
+        auto temp = start;
+        for (auto start_2 = first; start_2 != last; ++start_2) {
+          if (temp.getPtr() == nullptr || *start_2 != *temp) return end();
+          ++temp;
+        }
+        return start;
+      }
+    }
   }
 
   void delete_front() {
@@ -112,5 +150,25 @@ class list {
       delNode->next = nullptr;
       delete delNode;
     }
+  }
+
+  void delete_after(const iterator& from, const iterator& to) {
+    iterator temp = from;
+    ++temp;
+    difference_type i = 0;
+    while (temp != to) {
+      i++;
+      ++temp;
+    }
+
+    for (; i > 0; i--) delete_after(from);
+
+    // while (temp++ != to) {
+    //   std::cout << std::endl;
+    //   print(*this);
+    //   std::cout << std::endl;
+
+    //  delete_after(from);
+    //}
   }
 };

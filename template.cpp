@@ -1,7 +1,11 @@
 #include <list>
 #include <utility>
+#include <vector>
 
 #include "List.h"
+
+template <class container>
+void print(const container& obj);
 
 int main() {
   list<int> a;
@@ -18,19 +22,52 @@ int main() {
   a.insert_after(iter, 9);
   iter++;
   a.insert_after(iter, 7);
-  for (auto start = a.begin(); start != a.end(); ++start) {
-    std::cout << *start;
-  }
-  std::cout << std::endl;
-  a.delete_after(iter);
-  for (auto start = a.begin(); start != a.end(); ++start) {
-    std::cout << *start;
-  }
+  iter++;
 
-  a.clear();
-  for (auto start = a.begin(); start != a.end(); ++start) {
-    std::cout << *start;
-  }
+  std::cout << std::endl;
+  print(a);
+  std::cout << std::endl;
+
+  std::vector<int> vec{1, 2, 3};
+  a.insert_after(iter, vec.begin(), vec.end());
+  //a.insert_after(iter, a.begin(), iter);
+
+  std::cout << std::endl;
+  print(a);
+  std::cout << std::endl;
+
+  auto iter_2 = iter;
+
+  //++iter_2;
+  //++iter_2;
+  iter_2 += 2;
+
+  a.delete_after(iter, iter_2);
+
+  std::cout << std::endl;
+  print(a);
+  std::cout << std::endl;
+
+  if(a.search(3) != a.end())
+    std::cout << "found";
+  else 
+    std::cout << "not found"; 
+  
+  if(a.search(vec.begin(), vec.end()) != a.end())
+    std::cout << "found";
+  else 
+    std::cout << "not found";
+
+
+
+  // a.clear();
 
   return 0;
+}
+
+template <class container>
+void print(const container& obj) {
+  for (auto start = obj.cbegin(); start != obj.cend(); ++start) {
+    std::cout << *start << " ";
+  }
 }
