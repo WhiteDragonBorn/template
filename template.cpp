@@ -30,7 +30,7 @@ int main() {
 
   std::vector<int> vec{1, 2, 3};
   a.insert_after(iter, vec.begin(), vec.end());
-  //a.insert_after(iter, a.begin(), iter);
+  // a.insert_after(iter, a.begin(), iter);
 
   std::cout << std::endl;
   print(a);
@@ -48,17 +48,27 @@ int main() {
   print(a);
   std::cout << std::endl;
 
-  if(a.search(3) != a.end())
-    std::cout << "found";
-  else 
-    std::cout << "not found"; 
-  
-  if(a.search(vec.begin(), vec.end()) != a.end())
-    std::cout << "found";
-  else 
-    std::cout << "not found";
+  if (a.search(3) != a.end())
+    std::cout << "found" << std::endl;
+  else
+    std::cout << "not found" << std::endl;
 
+  a.push_front(3);
+  a.push_front(2);
+  a.push_front(1);
+  a.push_front(1);
 
+  std::cout << std::endl;
+  print(a);
+  std::cout << std::endl;
+
+  if (a.search(vec.begin(), vec.end()) != a.end())
+    std::cout << "found" << std::endl;
+  else
+    std::cout << "not found" << std::endl;
+
+  auto test = a.search(vec.begin(), vec.end());
+  std::cout << *(++test);
 
   // a.clear();
 

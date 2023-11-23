@@ -74,6 +74,7 @@ class list {
     // }
   };
 
+  // iter
   iterator begin() { return iterator(head); }
   const iterator cbegin() const { return iterator(head); }
   iterator end() { return iterator(nullptr); }
@@ -119,19 +120,19 @@ class list {
     return end();
   }
 
-  // throw
   template <class InputIt>
   iterator search(InputIt first, InputIt last) {
-    for (auto start = begin(); start != end(); ++start) {
-      if (*start == *first) {
-        auto temp = start;
-        for (auto start_2 = first; start_2 != last; ++start_2) {
-          if (temp.getPtr() == nullptr || *start_2 != *temp) return end();
-          ++temp;
-        }
-        return start;
+    for (iterator start = begin(); start != end(); ++start) {
+      iterator temp = start;
+      bool flag = true;
+      for (InputIt internalIt = first; internalIt != last; ++internalIt) {
+        if (flag == false) break;
+        if (temp == end() || *internalIt != *temp) flag = false;
+        ++temp;
       }
+      if (flag) return start;
     }
+    return end();
   }
 
   void delete_front() {
@@ -162,13 +163,5 @@ class list {
     }
 
     for (; i > 0; i--) delete_after(from);
-
-    // while (temp++ != to) {
-    //   std::cout << std::endl;
-    //   print(*this);
-    //   std::cout << std::endl;
-
-    //  delete_after(from);
-    //}
   }
 };
